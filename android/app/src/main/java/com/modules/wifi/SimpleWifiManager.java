@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.dmsl.anyplace.MyApplication;
-
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
@@ -56,12 +54,12 @@ public class SimpleWifiManager {
 	 * Creates a new instance
 	 *
 	 */
-	public static SimpleWifiManager getInstance() {
+	public static SimpleWifiManager getInstance(Context appContext) {
 
 		if (mInstance == null) {
-			synchronized (MyApplication.getAppContext()) {
+			synchronized (appContext) {
 				if (mInstance == null) {
-					mInstance = new SimpleWifiManager(MyApplication.getAppContext());
+					mInstance = new SimpleWifiManager(appContext);
 				}
 			}
 		}
