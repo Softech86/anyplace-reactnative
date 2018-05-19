@@ -7,7 +7,7 @@ import {
   FlatList,
   View
 } from 'react-native';
-import { NativeModules } from 'react-native';
+import { NativeModules, DeviceEventEmitter } from 'react-native';
 
 export default class SettingsScreen extends Component {
 
@@ -15,22 +15,42 @@ export default class SettingsScreen extends Component {
     super(props)
     this.state = {
       mounted: false,
-      wifi: []
+      wifi: [],
+      battery: 0,
+      signal: 0,
+      location: 'no'
     }
   }
 
-  async componentDidMount () {
-    const wifi = await NativeModules.WifiManager.getScanResults()
-    this.setState({ wifi })
+  componentDidMount () {
+    DeviceEventEmitter.addListener('signalStrengthsChanged', signal => {
+      console.log('signal', signal)
+      this.setState({signal})
+    })
+    NativeModules.SignalManager.startListening()
+    DeviceEventEmitter.addListener('locationChanged', location => {
+      this.setState({location})
+    })
+    NativeModules.LocationManager.startListening()
+    const getStatus = async () => {
+      const wifi = await NativeModules.WifiManager.getScanResults()
+      const battery = await NativeModules.BatteryManager.getBatteryStatus()
+      this.setState({ wifi, battery })
+    }
+    getStatus()
+    setInterval(getStatus, 2000)
   }
 
   render () {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-
+        <Text>Battery: { JSON.stringify(this.state.battery) }</Text>
+        <Text>Signal: { JSON.stringify(this.state.signal) }</Text>
+        <Text>Location: { JSON.stringify(this.state.location) }</Text>
+        <Text>Scanned Wifi Number: { this.state.wifi.length }</Text>
         <FlatList
           data={ this.state.wifi }
-          renderItem={ ({ item }) => <Text>{ item }</Text> }
+          renderItem={ ({ item }) => <Text>{ JSON.stringify(item) }</Text> }
         />
       </View>
     );

@@ -41,8 +41,8 @@ import Profile from './Profile.js'
 
 const Nav = TabNavigator(
   {
-    Map: {screen: MapNavigator},
     Profile: {screen: Profile},
+    Map: {screen: MapNavigator},
   }, options);
 
 export default Nav

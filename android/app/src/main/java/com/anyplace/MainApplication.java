@@ -3,6 +3,9 @@ package com.anyplace;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.modules.battery.BatteryManagerPackage;
+import com.modules.location.LocationManagerPackage;
+import com.modules.signal.SignalManagerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import cn.qiuxiang.react.amap3d.AMap3DPackage;
 import com.facebook.react.ReactNativeHost;
@@ -27,12 +30,15 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new VectorIconsPackage(),
-          new AMap3DPackage(),
+              new MainReactPackage(),
+              new VectorIconsPackage(),
+              new AMap3DPackage(),
 
-          new AnExampleReactPackage(),
-          new WifiManagerPackage()
+              new AnExampleReactPackage(),
+              new WifiManagerPackage(),
+              new BatteryManagerPackage(),
+              new SignalManagerPackage(),
+              new LocationManagerPackage()
       );
     }
 
